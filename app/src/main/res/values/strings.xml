@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="rationale">获取当地天气需要定位权限</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="textViewCityDefault">当前城市</string>
+    <string name="textViewDayTempDefault">36</string>
+    <string name="textViewDayWeatherDefault">白天天气</string>
+    <string name="textViewNightTempDefault">晚上气温</string>
+    <string name="textViewNightWeatherDefault">晚上天气</string>
+    <string name="textViewDayWind">白天风向</string>
+    <string name="textViewNightWind">晚上风向</string>
+    <string name="textViewDayPower">白天风力</string>
+    <string name="textViewNightPower">晚上风力</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textViewToday">今天</string>
+    <string name="textViewTomorrow">明天</string>
+    <string name="textViewAfterTomorrow">后天</string>
+    <string name="tempUnit">℃</string>
+</resources>

@@ -3,18 +3,19 @@ package com.theo.weather.viewmodel
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.google.gson.Gson
 import com.theo.weather.R
-import com.theo.weather.model.Body
-import com.theo.weather.model.Forecast
-import com.theo.weather.model.Live
+import com.theo.weather.model.*
 import com.theo.weather.network.VolleySingleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,12 +33,22 @@ class CityForecastViewModel(application: Application) : AndroidViewModel(applica
         MutableLiveData<Live>()
     val lives get() = _lives
 
+    //额外信息
+    private val _lifeIndex =
+        MutableLiveData<LifeIndex>()
+    val lifeIndex get() = _lifeIndex
+    //降水数据
+    private val _precipitation =
+        MutableLiveData<Precipitation>()
+    val precipitation get() = _precipitation
+
     @SuppressLint("StaticFieldLeak")
     val applicationContext: Context = application.applicationContext
 
     //位置信息
     private lateinit var locationClient: AMapLocationClient
     private lateinit var locationOption: AMapLocationClientOption
+    private lateinit var location: AMapLocation
 
     //网络队列
     private val queue =
@@ -66,6 +77,13 @@ class CityForecastViewModel(application: Application) : AndroidViewModel(applica
     init
     {
         locate()
+        //读取本地位置
+        val str =
+            application.getSharedPreferences("CityInfo", MODE_PRIVATE).getString("location", "")
+        if (str != "")
+        {
+            location = Gson().fromJson(str, AMapLocation::class.java)
+        }
     }
 
     //定位后获取当地天气
@@ -77,10 +95,15 @@ class CityForecastViewModel(application: Application) : AndroidViewModel(applica
         locationClient = AMapLocationClient(applicationContext)
         //定位回调
         locationClient.setLocationListener {
-            //成功定位后获取天气
-            if (it.adCode != "")
+            //成功定位后获取天气,否则使用本地缓存位置
+            if (it.errorCode == 0)
             {
-                loadWeather(it.adCode)
+                location = it
+                loadWeather(it)
+            }
+            else
+            {
+                loadWeather(location)
             }
         }
         //设置场景,自动配置定位
@@ -92,12 +115,14 @@ class CityForecastViewModel(application: Application) : AndroidViewModel(applica
     }
 
     //加载地区天气
-    private fun loadWeather(adCode: String)
+    private fun loadWeather(location: AMapLocation)
     {
         val urlAll =
-            "https://restapi.amap.com/v3/weather/weatherInfo?city=${adCode}&key=e93b697a37ceb83b5eaab3aff2540ee6&extensions=all"
+            "https://restapi.amap.com/v3/weather/weatherInfo?city=${location.adCode}&key=e93b697a37ceb83b5eaab3aff2540ee6&extensions=all"
         val urlBase =
-            "https://restapi.amap.com/v3/weather/weatherInfo?city=${adCode}&key=e93b697a37ceb83b5eaab3aff2540ee6&extensions=base"
+            "https://restapi.amap.com/v3/weather/weatherInfo?city=${location.adCode}&key=e93b697a37ceb83b5eaab3aff2540ee6&extensions=base"
+        val urlAdd =
+            "https://api.caiyunapp.com/v2.6/nA5OZCb6SVWDsEnT/${location.longitude},${location.latitude}/daily?dailysteps=1"
         //使用协程进行后台请求
         viewModelScope.launch(Dispatchers.IO)
         {
@@ -117,9 +142,27 @@ class CityForecastViewModel(application: Application) : AndroidViewModel(applica
                 {
 
                 })
+            //额外信息
+            val requestAdd = StringRequest(Request.Method.GET, urlAdd,
+                {
+                    _lifeIndex.value = Gson().fromJson(it, Body::class.java).result.daily.lifeIndex
+                    _precipitation.value = Gson().fromJson(it, Body::class.java).result.daily.precipitation[0]
+                },
+                {
+
+                })
             queue.add(requestBase)
             queue.add(requestAll)
+            queue.add(requestAdd)
         }
 
+    }
+
+    //保存位置信息到本地
+    fun saveAdCode()
+    {
+        val editor = applicationContext.getSharedPreferences("CityInfo", MODE_PRIVATE).edit()
+        editor.putString("location", Gson().toJson(location))
+        editor.apply()
     }
 }

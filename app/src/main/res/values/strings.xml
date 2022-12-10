@@ -3,7 +3,7 @@
     <string name="rationale">获取当地天气需要定位权限</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="textViewCityDefault">当前城市</string>
-    <string name="textViewDayTempDefault">36</string>
+    <string name="textViewDayTempDefault">10</string>
     <string name="textViewDayWeatherDefault">白天天气</string>
     <string name="textViewNightTempDefault">晚上气温</string>
     <string name="textViewNightWeatherDefault">晚上天气</string>
@@ -17,4 +17,12 @@
     <string name="textViewTomorrow">明天</string>
     <string name="textViewAfterTomorrow">后天</string>
     <string name="tempUnit">℃</string>
+    <string name="dressing_default">穿衣指数</string>
+    <string name="ultraviolet_default">紫外线指数</string>
+    <string name="comfort_default">舒适度</string>
+    <string name="coldRisk">感冒指数</string>
+    <string name="carWashing_default">洗车指数</string>
+    <string name="precipitation_default">降水数据</string>
+    <string name="need_GPS">首次使用请开始定位</string>
+
 </resources>

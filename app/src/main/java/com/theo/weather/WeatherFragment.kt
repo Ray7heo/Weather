@@ -3,17 +3,21 @@ package com.theo.weather
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.theo.weather.databinding.FragmentWeatherBinding
 import com.theo.weather.viewmodel.CityForecastViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import net.center.blurview.ShapeBlurView
+import net.center.blurview.enu.BlurCorner
+import net.center.blurview.enu.BlurMode
+
 
 class WeatherFragment : Fragment()
 {
@@ -26,6 +30,7 @@ class WeatherFragment : Fragment()
         savedInstanceState: Bundle?
     ): View
     {
+
         viewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
@@ -34,17 +39,20 @@ class WeatherFragment : Fragment()
         return bd.root
     }
 
+    @SuppressLint("Range")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
         bd.apply {
-            bd.data = viewModel
-            bd.lifecycleOwner = this@WeatherFragment
+            data = viewModel
+            lifecycleOwner = this@WeatherFragment
+
             //返回数据时设置天气图标
             viewModel.lives.observe(viewLifecycleOwner) {
+
                 val key = it.weather
-                imwToday.setImageResource(
+                baseFunc.imwToday.setImageResource(
                     CityForecastViewModel.weatherIcon.getOrDefault(
                         key,
                         R.drawable.clear
@@ -56,19 +64,19 @@ class WeatherFragment : Fragment()
                 val key0 = it.casts[0].dayWeather
                 val key1 = it.casts[1].dayWeather
                 val key2 = it.casts[2].dayWeather
-                imageView0.setImageResource(
+                baseFunc.imageView0.setImageResource(
                     CityForecastViewModel.weatherIcon.getOrDefault(
                         key0,
                         R.drawable.clear
                     )
                 )
-                imageView1.setImageResource(
+                baseFunc.imageView1.setImageResource(
                     CityForecastViewModel.weatherIcon.getOrDefault(
                         key1,
                         R.drawable.clear
                     )
                 )
-                imageView2.setImageResource(
+                baseFunc.imageView2.setImageResource(
                     CityForecastViewModel.weatherIcon.getOrDefault(
                         key2,
                         R.drawable.clear
@@ -89,5 +97,11 @@ class WeatherFragment : Fragment()
                 }
             }
         }
+    }
+
+    override fun onStop()
+    {
+        super.onStop()
+        viewModel.saveAdCode()
     }
 }

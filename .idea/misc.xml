@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/DEMO/Android/Weather/app/src/main/res/drawable/shape_life_index.xml" value="0.108" />
         <entry key="..\:/DEMO/Android/Weather/app/src/main/res/layout/activity_main.xml" value="0.23489583333333333" />
+        <entry key="..\:/DEMO/Android/Weather/app/src/main/res/layout/additional_function.xml" value="0.39351851851851855" />
+        <entry key="..\:/DEMO/Android/Weather/app/src/main/res/layout/base_function.xml" value="0.15756578947368421" />
         <entry key="..\:/DEMO/Android/Weather/app/src/main/res/layout/fragment_blank.xml" value="0.176" />
-        <entry key="..\:/DEMO/Android/Weather/app/src/main/res/layout/fragment_weather.xml" value="0.24947916666666667" />
+        <entry key="..\:/DEMO/Android/Weather/app/src/main/res/layout/fragment_weather.xml" value="0.20478837109876016" />
         <entry key="..\:/DEMO/Android/Weather/app/src/main/res/layout/today.xml" value="0.24947916666666667" />
       </map>
     </option>

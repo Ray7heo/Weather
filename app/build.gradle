@@ -41,9 +41,11 @@ dependencies {
     implementation'com.amap.api:location:latest.integration'
     implementation 'com.google.code.gson:gson:2.10'
     implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'com.github.centerzx:ShapeBlurView:1.0.5'
+
     implementation 'android.arch.navigation:navigation-fragment:1.0.0'
     implementation 'android.arch.navigation:navigation-ui:1.0.0'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
 
 
